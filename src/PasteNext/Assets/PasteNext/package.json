@@ -1,0 +1,19 @@
+{
+    "name": "com.eviltwo.paste-next",
+    "displayName": "Paste Next",
+    "version": "1.0.0",             
+    "unity": "2022.3",
+    "description": "Paste (or duplicate) object next to it instead of bottom.",
+    "author": {
+        "name": "DAIKI(eviltwo)",
+        "url": "https://github.com/eviltwo"
+    },
+
+    "keywords": [
+        "duplicate",
+        "sibling"
+    ],
+
+    "dependencies": {
+    }
+}
