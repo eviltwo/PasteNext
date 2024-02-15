@@ -15,8 +15,9 @@ namespace PasteNext
             Duplicate,
         }
 
-        private static CommandType _lastCommand;
-        private static List<GameObject> _lastSelectedObjects = new List<GameObject>();
+        private static CommandType _detectedCommand;
+        private static int _detectedFrameCount;
+        private static List<GameObject> _selectedObjects = new List<GameObject>();
         private static List<(GameObject, int)> _goSiblingIndexBuffer = new List<(GameObject, int)>();
         private static List<GameObject> _goBuffer = new List<GameObject>();
 
@@ -49,8 +50,6 @@ namespace PasteNext
 
         private static void CollectEventDetails()
         {
-            _lastCommand = CommandType.None;
-
             var e = Event.current;
             if (e == null)
             {
@@ -65,16 +64,17 @@ namespace PasteNext
             switch (e.commandName)
             {
                 case "Paste":
-                    _lastCommand = CommandType.Paste;
+                    _detectedCommand = CommandType.Paste;
                     break;
                 case "Duplicate":
-                    _lastCommand = CommandType.Duplicate;
+                    _detectedCommand = CommandType.Duplicate;
                     break;
                 default:
                     return;
             }
 
-            ChooseLastObjectEachParents(Selection.gameObjects, _lastSelectedObjects);
+            _detectedFrameCount = Time.frameCount;
+            ChooseLastObjectEachParents(Selection.gameObjects, _selectedObjects);
         }
 
         private static void ChooseLastObjectEachParents(GameObject[] gameObjects, List<GameObject> result)
@@ -119,7 +119,7 @@ namespace PasteNext
 
         private static void OnChangesPublished(ref ObjectChangeEventStream stream)
         {
-            if (_lastCommand == CommandType.None)
+            if (_detectedCommand == CommandType.None || Time.frameCount != _detectedFrameCount)
             {
                 return;
             }
@@ -137,18 +137,18 @@ namespace PasteNext
                 var go = _goBuffer[i];
 
                 GameObject baseObject = null;
-                for (int j = 0; j < _lastSelectedObjects.Count; j++)
+                for (int j = 0; j < _selectedObjects.Count; j++)
                 {
-                    if (_lastSelectedObjects[j].transform.parent == go.transform.parent)
+                    if (_selectedObjects[j].transform.parent == go.transform.parent)
                     {
-                        baseObject = _lastSelectedObjects[j];
+                        baseObject = _selectedObjects[j];
                         break;
                     }
                 }
 
                 if (baseObject != null)
                 {
-                    if ((_lastCommand == CommandType.Paste && settings.EnableOnPaste) || (_lastCommand == CommandType.Duplicate && settings.EnableOnDuplicate))
+                    if ((_detectedCommand == CommandType.Paste && settings.EnableOnPaste) || (_detectedCommand == CommandType.Duplicate && settings.EnableOnDuplicate))
                     {
                         var targetSiblingIndex = baseObject.transform.GetSiblingIndex() + 1;
                         go.transform.SetSiblingIndex(targetSiblingIndex);
@@ -162,7 +162,7 @@ namespace PasteNext
                 }
             }
 
-            _lastCommand = CommandType.None;
+            _detectedCommand = CommandType.None;
         }
 
         private static void GetCreatedGameObjects(ObjectChangeEventStream stream, List<GameObject> results)
