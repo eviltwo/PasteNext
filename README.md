@@ -7,7 +7,9 @@ Paste (or duplicate) object next to it instead of bottom.
 ## Asset Store
 If you would like to add it to "My Assets" or donate to me, please purchase it.
 
-Pending review (2024-03-16) https://assetstore.unity.com/publishers/12117
+https://assetstore.unity.com/packages/slug/279751 (Pending review 2024-03-16)
+
+https://assetstore.unity.com/publishers/12117
 
 ## UPM
 ```
