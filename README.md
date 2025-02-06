@@ -18,3 +18,9 @@ https://github.com/eviltwo/PasteNext.git?path=src/PasteNext/Assets/PasteNext
 **Safely** change sibling index of pasted objects. This tool does not override paste function. Just change sibling index of generated object.
 
 Work confirmed : Unity 2022.3.0
+
+# Support My Work
+As a solo developer, your financial support would be greatly appreciated and helps me continue working on this project.
+- [Asset Store](https://assetstore.unity.com/publishers/12117)
+- [Steam](https://store.steampowered.com/curator/45066588)
+- [GitHub Sponsors](https://github.com/sponsors/eviltwo)
